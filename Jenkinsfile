@@ -32,11 +32,6 @@ pipeline {
                 sh "apps-build-container -O ${REGISTRY_USERNAME} --image ${CONTAINER_REPO} --tag ${CONTAINER_TAG}"
             }
         }
-        stage('Run functional test(s)') { 
-            steps {
-                sh "tests/run_functional_test.sh ${REGISTRY_USERNAME}/${CONTAINER_REPO}:${CONTAINER_TAG} test_data"
-            }
-        }
         stage('Deploy to TACC.cloud') { 
             steps {
                 sh "apps-deploy -T -O ${REGISTRY_USERNAME} --image ${CONTAINER_REPO} --tag ${CONTAINER_TAG}"
