@@ -27,25 +27,6 @@ pipeline {
                 sh "make-session-client ${JOB_BASE_NAME} ${JOB_BASE_NAME}-${BUILD_ID}"
             }
         }
-        stage('Clean up previous test data') {
-            when { 
-                environment name: 'AGAVE_GET_DATA', value: '1' 
-            }
-            steps {
-                echo "Removing test_data"
-                sh "rm -rf test_data || true "
-            }
-        }
-        stage('(Copy in test data)') {
-            when { not {
-                    expression { fileExists('test_data') }
-                   }
-            }
-            steps {
-                sh "files-get -r -S data-tacc-work-cylu sd2e-data/lcms-pyquant-application/test_data > files-get.log 2>&1"
-                sh "ls -alth test_data"
-            }
-        }
         stage('Build app container') { 
             steps {
                 sh "apps-build-container -O ${REGISTRY_USERNAME} --image ${CONTAINER_REPO} --tag ${CONTAINER_TAG}"
